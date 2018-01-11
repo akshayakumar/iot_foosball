@@ -13,8 +13,8 @@ ir = 15
 ir2 = 18
 
 mqttc = mqtt.Client()
-mqttc.connect("192.168.195.7") #<--- Please change IP to match the location of your MQTT broker
-# 192.168.195.7
+mqttc.connect("128.107.70.30") #<--- Please change IP to match the location of your MQTT broker
+# 192.168.195.7 was IR 829 Broker
 mqttc.loop_start()
 
 GPIO.setup(ir, GPIO.IN, GPIO.PUD_DOWN)
@@ -57,7 +57,7 @@ def post_score(channel):
     print(start);
     brokerMessage = {'Status': 'scored', 'Player': '2', 'Score': 1, 'Data': '0'}
     print("message sent")
-    mqttc.publish("lights/player2", json.dumps(brokerMessage))
+    mqttc.publish("score", json.dumps(brokerMessage))
 
 def post_speed(channel):
     global stop
@@ -73,7 +73,7 @@ def post_speed(channel):
         print("posting speed")
         print(mph)
         brokerMessage = {'Status': 'speed', 'Speed':mph}
-        mqttc.publish("lights/player2", json.dumps(brokerMessage))
+        mqttc.publish("speed", json.dumps(brokerMessage))
 
 # while GPIO.input(ir)==0:
 #     start = time.time();

@@ -1,20 +1,10 @@
-import RPi.GPIO as GPIO
 import json
 import paho.mqtt.client as mqtt
 import time
 
-
-thread = None
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-ir = 15
-ir2 = 18
-
 mqttc = mqtt.Client()
-mqttc.connect("128.107.70.30") #<--- Please change IP to match the location of your MQTT broker
-# 192.168.195.7 was IR 829 Broker
+mqttc.connect("192.168.195.7") #<--- Please change IP to match the location of your MQTT broker
+# 192.168.195.7
 mqttc.loop_start()
 
 GPIO.setup(ir, GPIO.IN, GPIO.PUD_DOWN)
@@ -52,18 +42,18 @@ def data_collect():
 
 def post_score(channel):
     global start
-    start = time.time();
+    start = time.time()
     print("Start time is:")
-    print(start);
+    print(start)
     brokerMessage = {'Status': 'scored', 'Player': '1', 'Score': 1, 'Data': '0'}
     print("message sent")
-    mqttc.publish("score", json.dumps(brokerMessage))
+    mqttc.publish("lights", json.dumps(brokerMessage))
 
 def post_speed(channel):
     global stop
-    stop = time.time();
+    stop = time.time()
     print("Stop time is:")
-    print(stop);
+    print(stop)
     if stop > start:
         elapsed = stop-start
         print("Elapsed time is:")
@@ -73,7 +63,7 @@ def post_speed(channel):
         print("posting speed")
         print(mph)
         brokerMessage = {'Status': 'speed', 'Speed':mph}
-        mqttc.publish("speed", json.dumps(brokerMessage))
+        mqttc.publish("lights/player1", json.dumps(brokerMessage))
 
 # while GPIO.input(ir)==0:
 #     start = time.time();
