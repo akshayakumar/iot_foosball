@@ -26,29 +26,6 @@ stop = 0
 def data_collect():
     GPIO.add_event_detect(ir, GPIO.FALLING, callback=post_score, bouncetime=200)
     GPIO.add_event_detect(ir2, GPIO.RISING, callback=post_speed, bouncetime=200)
-    while True:
-        time.sleep(0)
-
-    """while True:
-
-        time.sleep(0)
-        t1 = time.time()
-        try:
-            channel = GPIO.wait_for_edge(ir,
-                                         GPIO.RISING,
-                                         timeout=5000)
-            if channel != None:
-                rpm = 0
-                brokerMessage = {'Status': 'scored', 'Player': '1', 'Score': 1, 'Data': '0'}
-                print("message sent")
-                mqttc.publish("lights/player1", json.dumps(brokerMessage))
-            else:
-                brokerMessage = {"rpm": 1}
-        except KeyboardInterrupt:
-            connection.close()
-            GPIO.cleanup()
-            sys.exit(0)"""
-
 
 def post_score(channel):
     global start
@@ -57,7 +34,7 @@ def post_score(channel):
     print(start);
     brokerMessage = {'Status': 'scored', 'Player': '2', 'Score': 1, 'Data': '0'}
     print("message sent")
-    mqttc.publish("score", json.dumps(brokerMessage))
+    mqttc.publish("foosball/score", json.dumps(brokerMessage))
 
 def post_speed(channel):
     global stop
@@ -73,7 +50,7 @@ def post_speed(channel):
         print("posting speed")
         print(mph)
         brokerMessage = {'Status': 'speed', 'Speed':mph}
-        mqttc.publish("speed", json.dumps(brokerMessage))
+        mqttc.publish("foosball/speed", json.dumps(brokerMessage))
 
 # while GPIO.input(ir)==0:
 #     start = time.time();
