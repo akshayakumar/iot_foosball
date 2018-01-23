@@ -82,7 +82,7 @@ function processScore(message) {
 
 	if (foosballScores.team1Score < 5 && foosballScores.team2Score < 5) {
 		//ding bell
-		play.sound('./sounds/single_ding.wav');
+		// play.sound('./sounds/single_ding.wav');
 		
 		//emit websocket with scores to all connected clients
 		io.emit('scoreUpdate', foosballScores);
@@ -111,11 +111,11 @@ function resetScore() {
 function setWinner (team1, team2) {
 	//Play winning sound
 	//ding bell
-	play.sound('./sounds/single_ding.wav');
+	// play.sound('./sounds/single_ding.wav');
 	
-	setTimeout(() => {
-		play.sound('./sounds/win.wav')
-	}, 500);
+	// setTimeout(() => {
+	// 	play.sound('./sounds/win.wav')
+	// }, 500);
 	
 
 	//Call DX

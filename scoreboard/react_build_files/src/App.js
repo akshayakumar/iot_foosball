@@ -12,8 +12,11 @@ import Confetti from 'react-confetti'
 import io from 'socket.io-client';
 // import Leaderboard from 'react-native-leaderboard';
 import ReactSpeedometer from "react-d3-speedometer";
+import Sound from 'react-sound';
+import singleDing from './single_ding.wav';
+import winSound from './win.wav';
 
-// const socket = io('http://localhost:3003') For local dev
+// const socket = io('http://localhost:3003') //For local dev
 const socket = io();
 
 class App extends Component {
@@ -30,8 +33,9 @@ class App extends Component {
       'away_label': 'Team 2',
       'timer_interval': null,
       'winningTimeout': null,
-      'ballSpeed': 5
-      
+      'ballSpeed': 5,
+      'playUrl': null,
+      'playStatus': 'STOPPED'
     }
   }
 
@@ -112,11 +116,30 @@ class App extends Component {
 
   setScore = (scoreUpdate) => {
     // console.log(this.state.team1_score);
+    console.log('score updated');
     this.setState({team1_score: scoreUpdate.team1Score, team2_score: scoreUpdate.team2Score});
+    if (scoreUpdate.team1Score !== 0 || scoreUpdate.team2Score !== 0) {
+      if (this.state.playStatus == 'PLAYING'){
+        this.setState({playStatus: 'STOPPED'})
+      }
+      this.setState({playUrl: singleDing, playStatus: 'PLAYING'});
+      // play.sound('singleDing');
+    }
+  }
+
+  handleSongFinishedPlaying = () => {
+    console.log('stopping song');
+    this.setState({playStatus: 'STOPPED'})
   }
 
   setWinner = (scoreUpdate,timeout) => {
-    this.setState({team1_score: scoreUpdate.team1Score, team2_score: scoreUpdate.team2Score});
+    if (this.state.playStatus == 'PLAYING'){
+      this.setState({playStatus: 'STOPPED'})
+    }
+    this.setState({team1_score: scoreUpdate.team1Score, team2_score: scoreUpdate.team2Score, playUrl: singleDing, playStatus: 'PLAYING'});
+    setTimeout(() => {
+      this.setState({playUrl: winSound, playStatus: 'PLAYING'})
+    }, 500);
     clearInterval(this.state.timer_interval);
     this.playConfetti(timeout)
     this.flashWinner(timeout,scoreUpdate)
@@ -170,12 +193,15 @@ class App extends Component {
       period_indicators,
       total_periods,
       team_possession,
-      ballSpeed
+      ballSpeed,
+      playUrl,
+      playStatus
     } = this.state;
 
     return (
       <div>
         <DimensionedExample recycle={this.state.confetti_recycle} run={this.state.confetti_run} />
+        <ScoreboardSounds playStatus={playStatus} playUrl={playUrl} onFinishedPlaying={this.handleSongFinishedPlaying} />
         <div className="demo-app">
           <div className="demo-container">
             <ScoreboardTitle />
@@ -211,7 +237,7 @@ class App extends Component {
                   // outline: "2px solid #434343",
                   // outlineOffset: "-13px"
               }}>
-              <div class="label-box theme--dark" style={{width: "30%", margin: "auto", marginBottom: "20px"}}><span class="label-text">Speed of Last Shot</span></div>
+              <div className="label-box theme--dark" style={{width: "30%", margin: "auto", marginBottom: "20px"}}><span className="label-text">Speed of Last Shot</span></div>
               <div style={{
                 maxWidth: "450px",
                 height:"275px",
@@ -267,14 +293,28 @@ class ScoreboardTitle extends Component {
     return (
       <div id="header-wrapper">
         <div style={{margin:"auto", maxWidth: "1500px"}}>
-          <h1 class="chrome">Score Board</h1>
-          <h3 class="dreams">FogBall!</h3>
+          <h1 className="chrome">Score Board</h1>
+          <h3 className="dreams">FogBall!</h3>
         </div>
       </div>
     )
   }
 }
 
+class ScoreboardSounds extends Component {
+
+  render() {
+    // return <Sound playStatus={this.props.playStatus} url={this.props.playUrl} />; // Check props in next section
+    return (
+      <Sound
+        url={this.props.playUrl}
+        playStatus={this.props.playStatus}
+        autoLoad={true}
+        onFinishedPlaying={this.props.onFinishedPlaying}
+      />
+    )
+  }
+}
 
 // class reactScoreboard extends Component {
 //   constructor(props) {

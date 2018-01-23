@@ -1,7 +1,9 @@
 {
   "main.css": "static/css/main.b82c6233.css",
   "main.css.map": "static/css/main.b82c6233.css.map",
-  "main.js": "static/js/main.23d7e69f.js",
-  "main.js.map": "static/js/main.23d7e69f.js.map",
-  "static/media/sandbox.png": "static/media/sandbox.9239984b.png"
+  "main.js": "static/js/main.8eeb5ab2.js",
+  "main.js.map": "static/js/main.8eeb5ab2.js.map",
+  "static/media/sandbox.png": "static/media/sandbox.9239984b.png",
+  "static/media/single_ding.wav": "static/media/single_ding.fd4c7502.wav",
+  "static/media/win.wav": "static/media/win.56752380.wav"
 }
