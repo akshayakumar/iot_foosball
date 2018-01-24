@@ -55,8 +55,8 @@ class App extends Component {
     });
 
     socket.on('speedUpdate', speedUpdate => {
-      console.log('received speedUpdate');
-      console.log(speedUpdate);
+      //console.log('received speedUpdate');
+      //console.log(speedUpdate);
       // scoreUpdate = JSON.parse(scoreUpdate)
       this.processSpeedUpdate(speedUpdate.speed);
     });
@@ -116,7 +116,6 @@ class App extends Component {
 
   setScore = (scoreUpdate) => {
     // console.log(this.state.team1_score);
-    console.log('score updated');
     this.setState({team1_score: scoreUpdate.team1Score, team2_score: scoreUpdate.team2Score});
     if (scoreUpdate.team1Score !== 0 || scoreUpdate.team2Score !== 0) {
       if (this.state.playStatus == 'PLAYING'){
@@ -128,7 +127,7 @@ class App extends Component {
   }
 
   handleSongFinishedPlaying = () => {
-    console.log('stopping song');
+    // console.log('stopping song');
     this.setState({playStatus: 'STOPPED'})
   }
 
