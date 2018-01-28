@@ -8,7 +8,7 @@ const io = require('socket.io')(server);
 const play = require('play');
 
 const mqtt = require('mqtt');
-var client  = mqtt.connect('mqtt://128.107.70.30');
+var client  = mqtt.connect('mqtt://192.168.195.7'); //128.107.70.30 for mqtt.cisco.com
 var winningTimeout = 10 //number of seconds to flash winner
 
 server.listen(3003, function(err){
